@@ -1,3 +1,7 @@
+## 2.24.0
+* Fix getBlockAt when outside bounds
+* Improve documentation and examples
+
 ## 2.23.0
 * 1.16 support
 * fix noteheard (thanks @Naomi-alt)
