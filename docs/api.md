@@ -767,7 +767,7 @@ Create and return an instance of the class bot.
  * clientToken : generated if a password is given
  * accessToken : generated if a password is given
  * logErrors : true by default, catch errors and log them
- * hideErrors : false by default, do not log errors (even if logErrors is true)
+ * hideErrors : true by default, do not log errors (even if logErrors is true)
  * keepAlive : send keep alive packets : default to true
  * checkTimeoutInterval : default to `30*1000` (30s), check if keepalive received at that period, disconnect otherwise.
  * loadInternalPlugins : defaults to true
@@ -1337,7 +1337,9 @@ Finds the closest blocks from the given point.
  * `options` - Options for the search:
    - `point` - The start position of the search (center). Default is the bot position.
    - `matching` - A function that returns true if the given block is a match. Also supports this value being a block id or array of block ids.
-   - `useExtraInfo` - Use extra info when matching (block entities, signs, painting), 2x slower
+   - `useExtraInfo` - To preserve backward compatibility can result in two behavior depending on the type
+      - **boolean** - Provide your `matching` function more data - noticeably slower aproach
+      - **function** - Creates two stage maching, if block passes `matching` function it is passed further to `useExtraInfo` with additional info
    - `maxDistance` - The furthest distance for the search, defaults to 16.
    - `count` - Number of blocks to find before returning the search. Default to 1. Can return less if not enough blocks are found exploring the whole area.
 
@@ -1555,7 +1557,7 @@ dig any other blocks until the block has been broken, or you call
 `bot.stopDigging()`.
 
  * `block` - the block to start digging into
- * `forceLook` - (optional) if true, look at the block and start mining instantly
+ * `forceLook` - (optional) if true, look at the block and start mining instantly. If false, the bot will slowly turn to the block to mine. Additionally, this can be assigned to 'ignore' to prevent the bot from moving it's head at all.
  * `callback(err)` - (optional) called when the block is broken or you
    are interrupted.
 

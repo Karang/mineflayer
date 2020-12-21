@@ -48,19 +48,20 @@ interface BotEvents {
     username: string,
     message: string,
     translate: string | null,
-    jsonMsg: string,
+    jsonMsg: ChatMessage,
     matches: Array<string> | null
   ) => void;
   whisper: (
     username: string,
     message: string,
     translate: string | null,
-    jsonMsg: string,
+    jsonMsg: ChatMessage,
     matches: Array<string> | null
   ) => void;
-  actionBar: (jsonMsg: string) => void;
+  actionBar: (jsonMsg: ChatMessage) => void;
   error: (err: Error) => void;
-  message: (jsonMsg: string, position: string) => void;
+  message: (jsonMsg: ChatMessage, position: string) => void;
+  unmatchedMessage: (stringMsg: string, jsonMsg: ChatMessage) => void;
   login: () => void;
   spawn: () => void;
   respawn: () => void;
@@ -268,13 +269,13 @@ export class Bot extends (EventEmitter as new () => TypedEmitter<BotEvents>) {
     callback?: (err?: Error) => void
   ): Promise<void>;
 
-  dig(block: Block, callback?: (err?: Error) => void): Promise<void>;
+  dig(block: Block, forceLook?: boolean | 'ignore', callback?: (err?: Error) => void): Promise<void>;
 
   stopDigging(): void;
 
   digTime(block: Block): number;
 
-  placeBlock(referenceBlock: Block, faceVector: Vec3, cb: () => void): Promise<void>;
+  placeBlock(referenceBlock: Block, faceVector: Vec3, cb?: () => void): Promise<void>;
 
   activateBlock(block: Block, callback?: (err?: Error) => void): Promise<void>;
 
@@ -437,7 +438,7 @@ export class ChatMessage {
 
   toMotd(lang?: { [key: string]: string }): string;
 
-  toAnsi(lang: { [key: string]: string }): string;
+  toAnsi(lang?: { [key: string]: string }): string;
 }
 
 export interface ChatPattern {
